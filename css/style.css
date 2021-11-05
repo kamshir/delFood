@@ -568,6 +568,10 @@ button {
     line-height: 23px;
 }
 
+.message {
+    color: brown;
+}
+
 @media (max-width: 1366px) {
     .container {
         max-width: 960px;

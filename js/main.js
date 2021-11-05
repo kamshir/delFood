@@ -6,6 +6,7 @@ const closeAuth = document.querySelector('.close-auth');
 const logInForm = document.getElementById('logInForm');
 const inputLogin = document.getElementById('login');
 const inputPassword = document.getElementById('password');
+const message = document.querySelector('.message');
 
 const login = (user) => {
   buttonAuth.style.display = 'none';
@@ -15,6 +16,8 @@ const login = (user) => {
 
   userName.textContent = user.login;
   modalAuth.style.display = 'none';
+
+  localStorage.setItem('user', JSON.stringify(user));
 }
 
 const logout = () => {
@@ -31,8 +34,13 @@ buttonAuth.addEventListener('click', () => {
   modalAuth.style.display = 'flex';
 });
 
-closeAuth.addEventListener('click', () => {
-  modalAuth.style.display = 'none';
+modalAuth.addEventListener('click', e => {
+  const target = e.target;
+  console.log(target);
+  if (!target.closest('.modal-dialog') || target === closeAuth){
+    modalAuth.style.display = 'none';
+    logInForm.reset();
+  }
 });
 
 buttonOut.addEventListener('click', () => {
@@ -41,14 +49,26 @@ buttonOut.addEventListener('click', () => {
 
 logInForm.addEventListener('submit', e => {
   e.preventDefault();
+  const err = [];
   const user = {
     login: inputLogin.value,
     password: inputPassword.value
   };
-  localStorage.setItem('user', JSON.stringify(user));
-  login(user);
+  if (!inputLogin.value){
+    err.push('Введите логин');
+  }
+  if (!inputPassword.value){
+    err.push('Введите пароль');
+  }
+
+  if (!err.length){
+    login(user);
+  } else {
+    message.innerHTML = err.join('<br>');
+  }
 });
 
 if (localStorage.getItem('user')){
   login(JSON.parse(localStorage.getItem('user')));
+  console.log(localStorage.getItem('user'));
 }
