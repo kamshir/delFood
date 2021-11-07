@@ -28,6 +28,7 @@ const logout = () => {
   userName.textContent = '';
 
   localStorage.removeItem('user');
+  window.location.href = '/';
 }
 
 buttonAuth.addEventListener('click', () => {
@@ -36,7 +37,6 @@ buttonAuth.addEventListener('click', () => {
 
 modalAuth.addEventListener('click', e => {
   const target = e.target;
-  console.log(target);
   if (!target.closest('.modal-dialog') || target === closeAuth){
     modalAuth.style.display = 'none';
     logInForm.reset();
