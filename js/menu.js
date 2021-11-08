@@ -3,6 +3,8 @@ if (localStorage.getItem('restaurant')){
 
   const cardsMenu = document.querySelector('.cards-menu');
 
+  const cartArray = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [];
+
   const changeRestData = (restaurant) => {
     const restaurantTitle = document.querySelector('.restaurant-title');
     restaurantTitle.textContent = restaurant.name;
@@ -14,8 +16,14 @@ if (localStorage.getItem('restaurant')){
     category.textContent = restaurant.kitchen;
   }
 
+  const addToCart = (cartItem) => {
+    cartArray.push(cartItem);
+
+    localStorage.setItem('cart', JSON.stringify(cartArray));
+  }
+
   const renderItems = (data) => {
-    data.forEach(({ description, image, name, price }) => {
+    data.forEach(({ id, description, image, name, price }) => {
       const card = document.createElement('div');
       card.classList.add('card');
       card.innerHTML = `
@@ -38,6 +46,14 @@ if (localStorage.getItem('restaurant')){
           </div>
         </div>
       `;
+
+      card.querySelector('.button-card-text').addEventListener('click', () => {
+        const cartItem = { name, price,
+          count: 1
+        }
+
+        addToCart(cartItem)
+      });
 
       cardsMenu.append(card);
     });
